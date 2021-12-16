@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:real_estate_mobile/services/APIService.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -8,6 +9,13 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  TextEditingController usernameController = new TextEditingController();
+  TextEditingController passwordController = new TextEditingController();
+  var result = null;
+  Future<void> GetData() async {
+    result = await APIService.Get('Country', null);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,12 +27,12 @@ class _LoginState extends State<Login> {
             children: [
               Image(
                 image: AssetImage('assets/login.jpg'),
-                width: 100,
               ),
               SizedBox(
                 height: 20,
               ),
               TextField(
+                controller: usernameController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20)
@@ -36,6 +44,7 @@ class _LoginState extends State<Login> {
                 height: 20,
               ),
               TextField(
+                controller: passwordController,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20)
@@ -53,8 +62,15 @@ class _LoginState extends State<Login> {
                   color: Colors.blue[700],
                   borderRadius: BorderRadius.circular(20)
                 ),
-                child: TextButton(onPressed: (){},
-                    child: Text('Login', style: TextStyle(color: Colors.white, fontSize: 20),),
+                child: TextButton(child: Text('Login', style: TextStyle(color: Colors.white, fontSize: 20),),
+                  onPressed: () async {
+                    APIService.username = usernameController.text;
+                    APIService.password = passwordController.text;
+                    await GetData();
+                    if (result != null) {
+                      Navigator.of(context).pushReplacementNamed('/home');
+                    }
+                  },
                 ),
               ),
             ],

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:real_estate_mobile/pages/Login.dart';
 import 'package:real_estate_mobile/pages/Loading.dart';
 import 'package:real_estate_mobile/pages/Home.dart';
+import 'package:real_estate_mobile/pages/Properties.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,7 +20,8 @@ class MyApp extends StatelessWidget {
       home: Login(),
       routes: {
         '/loading':(context)=>Loading(),
-        '/home':(context)=>Home()
+        '/home':(context)=>Home(),
+        '/properties':(context)=>Properties()
       }
     );
   }

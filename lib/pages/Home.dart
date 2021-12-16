@@ -10,6 +10,27 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Sidemenu'),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+/*            DrawerHeader(child: Text('RealEstate'),
+            decoration: BoxDecoration(
+                color: Colors.blue
+              ),
+            ),*/
+            ListTile(
+              title: Text('Proizvodi'),
+              onTap: (){
+                Navigator.of(context).pushNamed('/properties');
+              },
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
