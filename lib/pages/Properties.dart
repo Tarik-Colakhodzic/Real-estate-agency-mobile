@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:real_estate_mobile/models/Property.dart';
+import 'package:real_estate_mobile/pages/PropertyDetails.dart';
 import 'package:real_estate_mobile/services/APIService.dart';
 
 class Properties extends StatefulWidget {
@@ -44,10 +46,23 @@ class _PropertiesState extends State<Properties> {
     print(properties);
     return properties!.map((e) => Property.fromJson(e)).toList();
   }
+
+  Widget PropertyWidget(property){
+    return Card(
+        child: TextButton(
+          onPressed: () { 
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => PropertyDetails(property: property))
+            );
+          },
+          child: Padding(
+            padding: EdgeInsets.all(20),
+            child: Text(property.id.toString() + " " + property.title + " " + property.price),
+          )
+        )
+    );
+  }
 }
 
-Widget PropertyWidget(property){
-  return Card(
-    child: Text(property.id.toString() + " " + property.title + " " + property.price),
-  );
-}
+
