@@ -43,7 +43,6 @@ class _PropertiesState extends State<Properties> {
 
   Future<List<Property>> GetProperties() async {
     var properties = await APIService.Get('Property', null);
-    print(properties);
     return properties!.map((e) => Property.fromJson(e)).toList();
   }
 
@@ -58,7 +57,7 @@ class _PropertiesState extends State<Properties> {
           },
           child: Padding(
             padding: EdgeInsets.all(20),
-            child: Text(property.id.toString() + " " + property.title + " " + property.price),
+            child: Text(property.title + " " + property.price),
           )
         )
     );

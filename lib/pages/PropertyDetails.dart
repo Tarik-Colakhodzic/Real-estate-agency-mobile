@@ -14,6 +14,12 @@ class PropertyDetails extends StatelessWidget {
       ),
       body: Column(
         children: [
+          property.propertyPhotos.length > 0 ?
+          Center(
+            child: Image(
+              height: 300, width: 300, image: MemoryImage(property.propertyPhotos[0]),
+            ),
+          ) : Text("No image"),
           Text(property.title),
         ],
       ),
