@@ -22,19 +22,23 @@ class _PropertiesState extends State<Properties> {
     );
   }
 
-  Widget bodyWidget(){
+  Widget bodyWidget() {
     return FutureBuilder<List<Property>>(
       future: GetProperties(),
-      builder: (BuildContext context, AsyncSnapshot<List<Property>> snapshot){
-        if(snapshot.connectionState==ConnectionState.waiting){
-          return Center(child: Text('Loading...'),);
-        }else{
-          if(snapshot.hasError){
-            return Center(child: Text('${snapshot.error}'),);
-          }else{
-            return ListView(
-              children: snapshot.data!.map((e) => PropertyWidget(e)).toList()
+      builder: (BuildContext context, AsyncSnapshot<List<Property>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: Text('Loading...'),
+          );
+        } else {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text('${snapshot.error}'),
             );
+          } else {
+            return ListView(
+                children:
+                    snapshot.data!.map((e) => PropertyWidget(e)).toList());
           }
         }
       },
@@ -46,22 +50,19 @@ class _PropertiesState extends State<Properties> {
     return properties!.map((e) => Property.fromJson(e)).toList();
   }
 
-  Widget PropertyWidget(property){
+  Widget PropertyWidget(property) {
     return Card(
         child: TextButton(
-          onPressed: () { 
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => PropertyDetails(property: property))
-            );
-          },
-          child: Padding(
-            padding: EdgeInsets.all(20),
-            child: Text(property.title + " " + property.price),
-          )
-        )
-    );
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          PropertyDetails(property: property)));
+            },
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Text(property.title + " " + property.price),
+            )));
   }
 }
-
-

@@ -24,7 +24,7 @@ class _HomeState extends State<Home> {
             ),*/
             ListTile(
               title: Text('Nekretnine'),
-              onTap: (){
+              onTap: () {
                 Navigator.of(context).pushNamed('/properties');
               },
             )

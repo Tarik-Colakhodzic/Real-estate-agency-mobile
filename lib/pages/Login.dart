@@ -34,11 +34,9 @@ class _LoginState extends State<Login> {
               TextField(
                 controller: usernameController,
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20)
-                  ),
-                  hintText: 'Korisničko ime'
-                ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    hintText: 'Korisničko ime'),
               ),
               SizedBox(
                 height: 20,
@@ -47,10 +45,8 @@ class _LoginState extends State<Login> {
                 controller: passwordController,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20)
-                    ),
-                  hintText: 'Lozinka'
-                ),
+                        borderRadius: BorderRadius.circular(20)),
+                    hintText: 'Lozinka'),
               ),
               SizedBox(
                 height: 20,
@@ -59,10 +55,13 @@ class _LoginState extends State<Login> {
                 height: 60,
                 width: 300,
                 decoration: BoxDecoration(
-                  color: Colors.blue[700],
-                  borderRadius: BorderRadius.circular(20)
-                ),
-                child: TextButton(child: Text('Login', style: TextStyle(color: Colors.white, fontSize: 20),),
+                    color: Colors.blue[700],
+                    borderRadius: BorderRadius.circular(20)),
+                child: TextButton(
+                  child: Text(
+                    'Login',
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                  ),
                   onPressed: () async {
                     APIService.username = usernameController.text;
                     APIService.password = passwordController.text;
