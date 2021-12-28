@@ -19,7 +19,11 @@ class PropertyDetails extends StatelessWidget {
               ? CarouselWithDots(
                   imgList: property.propertyPhotos,
                 )
-              : Text("No image"),
+              : Image(
+                  image: AssetImage('assets/login.jpg'),
+                  height: 300,
+                  width: 300,
+                ),
           Text("title: " + property.title),
           Text("shortDescription: " + property.shortDescription),
           Text("description: " + property.description),

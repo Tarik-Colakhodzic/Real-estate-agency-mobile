@@ -25,8 +25,6 @@ class _CarouselWithDotsState extends State<CarouselWithDots> {
                 child: Stack(
                   children: [
                     Image(
-                      //height: 300,
-                      //width: 300,
                       fit: BoxFit.cover,
                       image: MemoryImage(item),
                     ),
