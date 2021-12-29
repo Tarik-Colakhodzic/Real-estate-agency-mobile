@@ -18,6 +18,8 @@ class Property {
   final String numberOfBathRooms;
   final String balconySquareMeters;
   final bool internet;
+  final String? cityName;
+  final String? categoryName;
   final List<Uint8List> propertyPhotos;
 
   Property({
@@ -37,6 +39,8 @@ class Property {
     required this.balconySquareMeters,
     required this.internet,
     required this.propertyPhotos,
+    this.cityName,
+    this.categoryName
   });
 
   factory Property.fromJson(Map<String, dynamic> json) {
@@ -67,6 +71,8 @@ class Property {
         numberOfBathRooms: json["numberOfBathRooms"].toString(),
         balconySquareMeters: json["balconySquareMeters"].toString(),
         internet: json["internet"],
+        cityName: json["cityName"],
+        categoryName: json["categoryName"],
         propertyPhotos: bytes);
   }
 

@@ -39,6 +39,10 @@ class PropertyDetails extends StatelessWidget {
           Text("electricityConnection: " +
               property.electricityConnection.toString()),
           Text("waterConnection: " + property.waterConnection.toString()),
+          if(property.cityName != null)
+            Text("city: " + property.cityName!.toString()),
+          if(property.categoryName != null)
+            Text("category: " + property.categoryName!.toString()),
         ],
       ),
     );

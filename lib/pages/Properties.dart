@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:real_estate_mobile/models/Category.dart';
 import 'package:real_estate_mobile/models/Country.dart';
+import 'package:real_estate_mobile/models/OfferType.dart';
 import 'package:real_estate_mobile/models/Property.dart';
 import 'package:real_estate_mobile/pages/PropertyDetails.dart';
 import 'package:real_estate_mobile/services/APIService.dart';
@@ -20,6 +21,9 @@ class _PropertiesState extends State<Properties> {
   Category? _selectedCategory = null;
   List<DropdownMenuItem> categories = [];
 
+  OfferType? _selectedOfferType = null;
+  List<DropdownMenuItem> offerTypes = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +38,8 @@ class _PropertiesState extends State<Properties> {
             Column(
               children: [
                 CountryDropDownWidget(),
-                CategoryDropDownWidget()
+                CategoryDropDownWidget(),
+                OfferTypeDropDownWidget()
               ],
             ),
             Expanded(child: bodyWidget())
@@ -63,11 +68,6 @@ class _PropertiesState extends State<Properties> {
     return FutureBuilder<List<Country>>(
         future: GetCountries(_selectedCountry),
         builder: (BuildContext context, AsyncSnapshot<List<Country>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: Text('Loading...'),
-            );
-          } else {
             if (snapshot.hasError) {
               return Center(
                 child: Text('${snapshot.error}'),
@@ -89,8 +89,7 @@ class _PropertiesState extends State<Properties> {
                 ),
               );
             }
-          }
-        });
+          });
   }
 
   Future<List<Category>> GetCategories(Category? selectedItem) async {
@@ -114,11 +113,6 @@ class _PropertiesState extends State<Properties> {
     return FutureBuilder<List<Category>>(
         future: GetCategories(_selectedCategory),
         builder: (BuildContext context, AsyncSnapshot<List<Category>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: Text('Loading...'),
-            );
-          } else {
             if (snapshot.hasError) {
               return Center(
                 child: Text('${snapshot.error}'),
@@ -140,8 +134,52 @@ class _PropertiesState extends State<Properties> {
                 ),
               );
             }
-          }
-        });
+          });
+  }
+
+  Future<List<OfferType>> GetOfferTypes(OfferType? selectedItem) async {
+    var response = await APIService.Get('OfferType', null);
+    var offerTypeList = response!.map((i) => OfferType.fromJson(i)).toList();
+
+    offerTypes = offerTypeList.map((item) {
+      return DropdownMenuItem<OfferType>(
+        child: Text(item.name),
+        value: item,
+      );
+    }).toList();
+
+    if (selectedItem != null && selectedItem.id != 0)
+      _selectedOfferType =
+          offerTypeList.where((element) => element.id == selectedItem.id).first;
+    return offerTypeList;
+  }
+
+  Widget OfferTypeDropDownWidget() {
+    return FutureBuilder<List<OfferType>>(
+        future: GetOfferTypes(_selectedOfferType),
+        builder: (BuildContext context, AsyncSnapshot<List<OfferType>> snapshot) {
+            if (snapshot.hasError) {
+              return Center(
+                child: Text('${snapshot.error}'),
+              );
+            } else {
+              return Padding(
+                padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
+                child: DropdownButton<dynamic>(
+                  hint: Text('Odaberite tip objave'),
+                  isExpanded: true,
+                  items: offerTypes,
+                  onChanged: (newVal) {
+                    setState(() {
+                      _selectedOfferType = newVal as OfferType;
+                      GetProperties();
+                    });
+                  },
+                  value: _selectedOfferType,
+                ),
+              );
+            }
+          });
   }
 
   Widget bodyWidget() {
@@ -176,7 +214,14 @@ class _PropertiesState extends State<Properties> {
     if(_selectedCategory != null && _selectedCategory?.id != 0)
       queryParams.addAll({'CategoryId': _selectedCategory?.id.toString()});
 
-    var properties = await APIService.Get('Property', queryParams);
+    if(_selectedOfferType != null && _selectedOfferType?.id != 0)
+      queryParams.addAll({'OfferTypeId': _selectedOfferType?.id.toString()});
+
+    //queryParams.addAll({'IncludeList': "City"});
+    //queryParams.addAll({'IncludeList': "Category"});
+    List<String> includeList = ["City", "Category"];
+
+    var properties = await APIService.Get('Property', queryParams, includeList: includeList);
     return properties!.map((e) => Property.fromJson(e)).toList();
   }
 

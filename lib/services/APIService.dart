@@ -16,8 +16,13 @@ class APIService {
     password = Password;
   }
 
-  static Future<List<dynamic>?> Get(String route, dynamic object) async {
+  static Future<List<dynamic>?> Get(String route, dynamic object, {List<String>? includeList = null}) async {
     String queryString = Uri(queryParameters: object).query;
+    if(includeList != null && includeList.length > 0){
+      includeList.forEach((element) {
+        queryString += "&IncludeList=${element}";
+      });
+    }
     String baseUrl = "http://127.0.0.1:5010/api/" + route;
     if (object != null) {
       baseUrl = baseUrl + '?' + queryString;
