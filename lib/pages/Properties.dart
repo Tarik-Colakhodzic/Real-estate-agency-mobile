@@ -15,6 +15,8 @@ class Properties extends StatefulWidget {
 }
 
 class _PropertiesState extends State<Properties> {
+  TextEditingController _searchTextController = new TextEditingController();
+
   Country? _selectedCountry = null;
   List<DropdownMenuItem> countries = [];
 
@@ -32,11 +34,20 @@ class _PropertiesState extends State<Properties> {
         ),
         body: Column(
           children: [
-            //Center(
-              //child: CountryDropDownWidget(),
-            //),
             Column(
               children: [
+                TextField(
+                  controller: _searchTextController,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      hintText: 'Naslov'),
+                  onChanged: (newVal) => {
+                    setState(() {
+                      GetProperties();
+                    })
+                  },
+                ),
                 CountryDropDownWidget(),
                 CategoryDropDownWidget(),
                 OfferTypeDropDownWidget()
@@ -68,28 +79,28 @@ class _PropertiesState extends State<Properties> {
     return FutureBuilder<List<Country>>(
         future: GetCountries(_selectedCountry),
         builder: (BuildContext context, AsyncSnapshot<List<Country>> snapshot) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text('${snapshot.error}'),
-              );
-            } else {
-              return Padding(
-                padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
-                child: DropdownButton<dynamic>(
-                  hint: Text('Odaberite državu'),
-                  isExpanded: true,
-                  items: countries,
-                  onChanged: (newVal) {
-                    setState(() {
-                      _selectedCountry = newVal as Country;
-                      GetProperties();
-                    });
-                  },
-                  value: _selectedCountry,
-                ),
-              );
-            }
-          });
+          if (snapshot.hasError) {
+            return Center(
+              child: Text('${snapshot.error}'),
+            );
+          } else {
+            return Padding(
+              padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
+              child: DropdownButton<dynamic>(
+                hint: Text('Odaberite državu'),
+                isExpanded: true,
+                items: countries,
+                onChanged: (newVal) {
+                  setState(() {
+                    _selectedCountry = newVal as Country;
+                    GetProperties();
+                  });
+                },
+                value: _selectedCountry,
+              ),
+            );
+          }
+        });
   }
 
   Future<List<Category>> GetCategories(Category? selectedItem) async {
@@ -112,29 +123,30 @@ class _PropertiesState extends State<Properties> {
   Widget CategoryDropDownWidget() {
     return FutureBuilder<List<Category>>(
         future: GetCategories(_selectedCategory),
-        builder: (BuildContext context, AsyncSnapshot<List<Category>> snapshot) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text('${snapshot.error}'),
-              );
-            } else {
-              return Padding(
-                padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
-                child: DropdownButton<dynamic>(
-                  hint: Text('Odaberite kategoriju'),
-                  isExpanded: true,
-                  items: categories,
-                  onChanged: (newVal) {
-                    setState(() {
-                      _selectedCategory = newVal as Category;
-                      GetProperties();
-                    });
-                  },
-                  value: _selectedCategory,
-                ),
-              );
-            }
-          });
+        builder:
+            (BuildContext context, AsyncSnapshot<List<Category>> snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text('${snapshot.error}'),
+            );
+          } else {
+            return Padding(
+              padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
+              child: DropdownButton<dynamic>(
+                hint: Text('Odaberite kategoriju'),
+                isExpanded: true,
+                items: categories,
+                onChanged: (newVal) {
+                  setState(() {
+                    _selectedCategory = newVal as Category;
+                    GetProperties();
+                  });
+                },
+                value: _selectedCategory,
+              ),
+            );
+          }
+        });
   }
 
   Future<List<OfferType>> GetOfferTypes(OfferType? selectedItem) async {
@@ -157,29 +169,30 @@ class _PropertiesState extends State<Properties> {
   Widget OfferTypeDropDownWidget() {
     return FutureBuilder<List<OfferType>>(
         future: GetOfferTypes(_selectedOfferType),
-        builder: (BuildContext context, AsyncSnapshot<List<OfferType>> snapshot) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text('${snapshot.error}'),
-              );
-            } else {
-              return Padding(
-                padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
-                child: DropdownButton<dynamic>(
-                  hint: Text('Odaberite tip objave'),
-                  isExpanded: true,
-                  items: offerTypes,
-                  onChanged: (newVal) {
-                    setState(() {
-                      _selectedOfferType = newVal as OfferType;
-                      GetProperties();
-                    });
-                  },
-                  value: _selectedOfferType,
-                ),
-              );
-            }
-          });
+        builder:
+            (BuildContext context, AsyncSnapshot<List<OfferType>> snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text('${snapshot.error}'),
+            );
+          } else {
+            return Padding(
+              padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
+              child: DropdownButton<dynamic>(
+                hint: Text('Odaberite tip objave'),
+                isExpanded: true,
+                items: offerTypes,
+                onChanged: (newVal) {
+                  setState(() {
+                    _selectedOfferType = newVal as OfferType;
+                    GetProperties();
+                  });
+                },
+                value: _selectedOfferType,
+              ),
+            );
+          }
+        });
   }
 
   Widget bodyWidget() {
@@ -211,17 +224,19 @@ class _PropertiesState extends State<Properties> {
     if (_selectedCountry != null && _selectedCountry?.id != 0)
       queryParams.addAll({'CountryId': _selectedCountry?.id.toString()});
 
-    if(_selectedCategory != null && _selectedCategory?.id != 0)
+    if (_selectedCategory != null && _selectedCategory?.id != 0)
       queryParams.addAll({'CategoryId': _selectedCategory?.id.toString()});
 
-    if(_selectedOfferType != null && _selectedOfferType?.id != 0)
+    if (_selectedOfferType != null && _selectedOfferType?.id != 0)
       queryParams.addAll({'OfferTypeId': _selectedOfferType?.id.toString()});
 
-    //queryParams.addAll({'IncludeList': "City"});
-    //queryParams.addAll({'IncludeList': "Category"});
+    if (_searchTextController.text.isNotEmpty)
+      queryParams.addAll({'SearchText': _searchTextController.text});
+
     List<String> includeList = ["City", "Category"];
 
-    var properties = await APIService.Get('Property', queryParams, includeList: includeList);
+    var properties =
+        await APIService.Get('Property', queryParams, includeList: includeList);
     return properties!.map((e) => Property.fromJson(e)).toList();
   }
 

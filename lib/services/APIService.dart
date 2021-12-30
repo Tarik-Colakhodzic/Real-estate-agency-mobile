@@ -1,8 +1,6 @@
 import 'dart:convert';
-//import 'dart:ffi';
 import 'package:http/http.dart' as http;
 import 'dart:io';
-//import 'package:vjezbe2_app/models/Narudzbe.dart';
 
 class APIService {
   static String username = "";
