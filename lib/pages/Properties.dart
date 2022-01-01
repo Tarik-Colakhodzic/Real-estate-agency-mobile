@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:real_estate_mobile/models/Category.dart';
+import 'package:real_estate_mobile/models/City.dart';
 import 'package:real_estate_mobile/models/Country.dart';
 import 'package:real_estate_mobile/models/OfferType.dart';
 import 'package:real_estate_mobile/models/Property.dart';
@@ -19,6 +20,9 @@ class _PropertiesState extends State<Properties> {
 
   Country? _selectedCountry = null;
   List<DropdownMenuItem> countries = [];
+
+  City? _selectedCity = null;
+  List<DropdownMenuItem> cities = [];
 
   Category? _selectedCategory = null;
   List<DropdownMenuItem> categories = [];
@@ -49,6 +53,7 @@ class _PropertiesState extends State<Properties> {
                   },
                 ),
                 CountryDropDownWidget(),
+                CityDropDownWidget(),
                 CategoryDropDownWidget(),
                 OfferTypeDropDownWidget()
               ],
@@ -97,6 +102,51 @@ class _PropertiesState extends State<Properties> {
                   });
                 },
                 value: _selectedCountry,
+              ),
+            );
+          }
+        });
+  }
+
+  Future<List<City>> GetCities(City? selectedItem) async {
+    var response = await APIService.Get('City', null);
+    var cityList = response!.map((i) => City.fromJson(i)).toList();
+
+    cities = cityList.map((item) {
+      return DropdownMenuItem<City>(
+        child: Text(item.name),
+        value: item,
+      );
+    }).toList();
+
+    if (selectedItem != null && selectedItem.id != 0)
+      _selectedCity =
+          cityList.where((element) => element.id == selectedItem.id).first;
+    return cityList;
+  }
+
+  Widget CityDropDownWidget() {
+    return FutureBuilder<List<City>>(
+        future: GetCities(_selectedCity),
+        builder: (BuildContext context, AsyncSnapshot<List<City>> snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text('${snapshot.error}'),
+            );
+          } else {
+            return Padding(
+              padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
+              child: DropdownButton<dynamic>(
+                hint: Text('Odaberite grad'),
+                isExpanded: true,
+                items: cities,
+                onChanged: (newVal) {
+                  setState(() {
+                    _selectedCity = newVal as City;
+                    GetProperties();
+                  });
+                },
+                value: _selectedCity,
               ),
             );
           }
@@ -229,6 +279,9 @@ class _PropertiesState extends State<Properties> {
 
     if (_selectedOfferType != null && _selectedOfferType?.id != 0)
       queryParams.addAll({'OfferTypeId': _selectedOfferType?.id.toString()});
+
+    if(_selectedCity != null && _selectedCity?.id != 0)
+      queryParams.addAll({'CityId': _selectedCity?.id.toString()});
 
     if (_searchTextController.text.isNotEmpty)
       queryParams.addAll({'SearchText': _searchTextController.text});
