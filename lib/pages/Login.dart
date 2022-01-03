@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:real_estate_mobile/models/User.dart';
 import 'package:real_estate_mobile/services/APIService.dart';
 
 class Login extends StatefulWidget {
@@ -13,7 +14,12 @@ class _LoginState extends State<Login> {
   TextEditingController passwordController = new TextEditingController();
   var result = null;
   Future<void> GetData() async {
-    result = await APIService.Get('Country', null);
+    result = await APIService.Get('User', null);
+    if(result == null)
+      return;
+    var users = result.map((e) => User.fromJson((e))).toList();
+    if(users.length > 0)
+      APIService.loggedUserId = users.where((element) => element.username == usernameController.text).first.id;
   }
 
   @override
@@ -69,6 +75,21 @@ class _LoginState extends State<Login> {
                     await GetData();
                     if (result != null) {
                       Navigator.of(context).pushReplacementNamed('/home');
+                    } else {
+                      print("Alert");
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text('Neispravni pristupni podaci!'),
+                          content: const Text('Pogrešno korisničko ime ili lozinka!'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, 'Ok'),
+                              child: const Text('Ok'),
+                            ),
+                          ],
+                        ),
+                      );
                     }
                   },
                 ),

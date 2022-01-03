@@ -12,20 +12,21 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sidemenu'),
+        title: Text('Agencija za nekretnine'),
       ),
       drawer: Drawer(
         child: ListView(
           children: [
-/*            DrawerHeader(child: Text('RealEstate'),
-            decoration: BoxDecoration(
-                color: Colors.blue
-              ),
-            ),*/
             ListTile(
               title: Text('Nekretnine'),
               onTap: () {
                 Navigator.of(context).pushNamed('/properties');
+              },
+            ),
+            ListTile(
+              title: Text('Moje nekretnine'),
+              onTap: (){
+                Navigator.of(context).pushNamed('/myProperties');
               },
             )
           ],
