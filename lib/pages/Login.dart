@@ -13,13 +13,16 @@ class _LoginState extends State<Login> {
   TextEditingController usernameController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
   var result = null;
+
   Future<void> GetData() async {
     result = await APIService.Get('User', null);
-    if(result == null)
-      return;
+    if (result == null) return;
     var users = result.map((e) => User.fromJson((e))).toList();
-    if(users.length > 0)
-      APIService.loggedUserId = users.where((element) => element.username == usernameController.text).first.id;
+    if (users.length > 0)
+      APIService.loggedUserId = users
+          .where((element) => element.username == usernameController.text)
+          .first
+          .id;
   }
 
   @override
@@ -81,7 +84,8 @@ class _LoginState extends State<Login> {
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
                           title: const Text('Neispravni pristupni podaci!'),
-                          content: const Text('Pogrešno korisničko ime ili lozinka!'),
+                          content: const Text(
+                              'Pogrešno korisničko ime ili lozinka!'),
                           actions: <Widget>[
                             TextButton(
                               onPressed: () => Navigator.pop(context, 'Ok'),
@@ -94,6 +98,14 @@ class _LoginState extends State<Login> {
                   },
                 ),
               ),
+              SizedBox(
+                height: 20,
+              ),
+              InkWell(
+                child: Text('Registracija!', style: TextStyle(color: Colors.blue)),
+                onTap: () =>
+                    Navigator.of(context).pushReplacementNamed('/registration'),
+              )
             ],
           ),
         ),

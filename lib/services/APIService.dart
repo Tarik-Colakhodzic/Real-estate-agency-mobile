@@ -66,14 +66,26 @@ class APIService {
    String baseUrl="http://127.0.0.1:5010/api/"+route;
    final String basicAuth =
        'Basic ' + base64Encode(utf8.encode('$username:$password'));
-   final response = await http.post(
-     Uri.parse(baseUrl),
-     headers: <String, String>{
-       'Content-Type': 'application/json; charset=UTF-8',
-       'Authorization': basicAuth
-     },
-     body: body,
-   );
+   var response = null;
+   if(username.isNotEmpty && password.isNotEmpty) {
+     response = await http.post(
+       Uri.parse(baseUrl),
+       headers: <String, String>{
+         'Content-Type': 'application/json; charset=UTF-8',
+         'Authorization': basicAuth
+       },
+       body: body,
+     );
+   }
+   else{
+     response = await http.post(
+       Uri.parse(baseUrl),
+       headers: <String, String>{
+         'Content-Type': 'application/json; charset=UTF-8'
+       },
+       body: body,
+     );
+   }
 
    if (response.statusCode == 200) {
      return json.decode(response.body);
