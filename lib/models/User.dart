@@ -7,6 +7,7 @@ class User {
   String? phoneNumber;
   String? password;
   String? confirmedPassword;
+  List<int>? roles;
 
   User(
       {required this.id,
@@ -16,7 +17,8 @@ class User {
       this.email,
       this.phoneNumber,
       this.password,
-      this.confirmedPassword});
+      this.confirmedPassword,
+      this.roles});
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
@@ -30,6 +32,7 @@ class User {
         "email": email,
         "phoneNumber": phoneNumber,
         "password": password,
-        "confirmedPassword": confirmedPassword
+        "confirmedPassword": confirmedPassword,
+        "roles": roles
       };
 }

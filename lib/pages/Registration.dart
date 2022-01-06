@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:real_estate_mobile/models/Role.dart';
 import 'package:real_estate_mobile/models/User.dart';
 import 'package:real_estate_mobile/services/APIService.dart';
 
@@ -186,7 +187,8 @@ class _RegistrationState extends State<Registration> {
                                 ),
                               );
                             } else {
-                              Navigator.pop(context);
+                              Navigator.of(context)
+                                  .pushReplacementNamed('/registrationLogin');
                             }
                           })),
                 ],
@@ -197,6 +199,10 @@ class _RegistrationState extends State<Registration> {
   }
 
   Future<dynamic> CreateUser() async {
+    var rolesResponse = await APIService.Get('Role', null);
+    var roles = rolesResponse!.map((e) => Role.fromJson(e)).toList();
+    var clientRoleId  = roles.where((element) => element.name == 'Client').first.id;
+
     var user = User(
         id: 0,
         username: usernameController.text,
@@ -205,7 +211,8 @@ class _RegistrationState extends State<Registration> {
         email: emailController.text,
         phoneNumber: phoneNumberController.text,
         password: passwordController.text,
-        confirmedPassword: confirmedPasswordController.text);
+        confirmedPassword: confirmedPasswordController.text,
+        roles: [clientRoleId]);
 
     result = await APIService.Post('User', jsonEncode(user).toString());
     return result;
