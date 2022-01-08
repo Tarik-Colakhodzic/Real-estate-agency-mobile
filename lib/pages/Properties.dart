@@ -38,25 +38,27 @@ class _PropertiesState extends State<Properties> {
         ),
         body: Column(
           children: [
-            Column(
-              children: [
-                TextField(
-                  controller: _searchTextController,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      hintText: 'Naslov'),
-                  onChanged: (newVal) => {
-                    setState(() {
-                      GetProperties();
-                    })
-                  },
-                ),
-                CountryDropDownWidget(),
-                CityDropDownWidget(),
-                CategoryDropDownWidget(),
-                OfferTypeDropDownWidget()
-              ],
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  TextField(
+                    controller: _searchTextController,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        hintText: 'Naslov'),
+                    onChanged: (newVal) => {
+                      setState(() {
+                        GetProperties();
+                      })
+                    },
+                  ),
+                  CountryDropDownWidget(),
+                  CityDropDownWidget(),
+                  CategoryDropDownWidget(),
+                  OfferTypeDropDownWidget()
+                ],
+              ),
             ),
             Expanded(child: bodyWidget())
           ],
@@ -286,7 +288,7 @@ class _PropertiesState extends State<Properties> {
     if (_searchTextController.text.isNotEmpty)
       queryParams.addAll({'SearchText': _searchTextController.text});
 
-    List<String> includeList = ["City", "Category"];
+    List<String> includeList = ["City", "Category", "OfferType"];
 
     var properties =
         await APIService.Get('Property', queryParams, includeList: includeList);

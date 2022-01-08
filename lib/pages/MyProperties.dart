@@ -58,7 +58,7 @@ class _MyPropertiesState extends State<MyProperties> {
     Map<String, String?>? queryParams = {
       'UserId': APIService.loggedUserId.toString()
     };
-    List<String> includeList = ["Property"];
+    List<String> includeList = ["Property", "Property.City", "Property.Category", "Property.OfferType"];
 
     var myProperties = await APIService.Get('UserProperties', queryParams,
         includeList: includeList);

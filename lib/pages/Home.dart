@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:real_estate_mobile/services/APIService.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -27,6 +28,13 @@ class _HomeState extends State<Home> {
               title: Text('Moje nekretnine'),
               onTap: (){
                 Navigator.of(context).pushNamed('/myProperties');
+              },
+            ),
+            ListTile(
+              title: Text('Odjava'),
+              onTap: (){
+                APIService.Logout();
+                Navigator.of(context).pushNamed('/registrationLogin');
               },
             )
           ],

@@ -8,7 +8,7 @@ class Property {
   final String price;
   final String shortDescription;
   final String description;
-  final String publishDate;
+  final DateTime publishDate;
   final String squareMeters;
   final String address;
   final bool waterConnection;
@@ -20,6 +20,7 @@ class Property {
   final bool internet;
   final String? cityName;
   final String? categoryName;
+  final String? offerTypeName;
   final List<Uint8List> propertyPhotos;
 
   Property({
@@ -40,7 +41,8 @@ class Property {
     required this.internet,
     required this.propertyPhotos,
     this.cityName,
-    this.categoryName
+    this.categoryName,
+    this.offerTypeName
   });
 
   factory Property.fromJson(Map<String, dynamic> json) {
@@ -61,7 +63,7 @@ class Property {
         price: json["price"].toString(),
         shortDescription: json["shortDescription"],
         description: json["description"],
-        publishDate: json["publishDate"],
+        publishDate: DateTime.parse(json["publishDate"]),
         squareMeters: json["squareMeters"].toString(),
         address: json["address"],
         waterConnection: json["waterConnection"],
@@ -73,6 +75,7 @@ class Property {
         internet: json["internet"],
         cityName: json["cityName"],
         categoryName: json["categoryName"],
+        offerTypeName: json["offerTypeName"],
         propertyPhotos: bytes);
   }
 
@@ -92,6 +95,7 @@ class Property {
         "numberOfBathRooms": numberOfBathRooms,
         "balconySquareMeters": balconySquareMeters,
         "internet": internet,
+        "offerTypeName": offerTypeName,
         "propertyPhotos": propertyPhotos
       };
 }

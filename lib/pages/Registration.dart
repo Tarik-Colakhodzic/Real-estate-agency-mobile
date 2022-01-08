@@ -33,165 +33,167 @@ class _RegistrationState extends State<Registration> {
             padding: EdgeInsets.all(60),
             child: Form(
               key: _formKey,
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: firstNameController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: firstNameController,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          hintText: 'Ime'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty)
+                          return 'Ime je obavezno!';
+                        else
+                          return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: lastNameController,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          hintText: 'Prezime'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty)
+                          return 'Prezime je obavezno!';
+                        else
+                          return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: usernameController,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          hintText: 'Korisničko ime'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty)
+                          return 'Korisničko ime je obavezno!';
+                        else
+                          return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: emailController,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          hintText: 'Email'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty)
+                          return 'Email je obavezan!';
+                        if (!isEmailValid(value))
+                          return 'Email nije u ispravnom formatu!';
+                        else
+                          return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: phoneNumberController,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          hintText: 'Broj telefona'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty)
+                          return 'Broj telefona je obavezan!';
+                        if (!isPhoneNumberValid(value))
+                          return 'Broj telefona nije u ispravnom formatu (060-000-000)!';
+                        else
+                          return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          hintText: 'Lozinka'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty)
+                          return 'Lozinka je obavezna!';
+                        if (!isPasswordValid(value))
+                          return 'Lozinka mora sadržavati minimalno 8 znakova, te velika, mala slova, brojeve i specijalne znakove';
+                        else
+                          return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: confirmedPasswordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          hintText: 'Potvrda lozinke'),
+                      validator: (value) {
+                        if (value != passwordController.text)
+                          return 'Lozinke se ne poklapaju!';
+                        else
+                          return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                        height: 50,
+                        width: 150,
+                        decoration: BoxDecoration(
+                            color: Colors.blue[700],
                             borderRadius: BorderRadius.circular(20)),
-                        hintText: 'Ime'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty)
-                        return 'Ime je obavezno!';
-                      else
-                        return null;
-                    },
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    controller: lastNameController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        hintText: 'Prezime'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty)
-                        return 'Prezime je obavezno!';
-                      else
-                        return null;
-                    },
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    controller: usernameController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        hintText: 'Korisničko ime'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty)
-                        return 'Korisničko ime je obavezno!';
-                      else
-                        return null;
-                    },
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    controller: emailController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        hintText: 'Email'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty)
-                        return 'Email je obavezan!';
-                      if (!isEmailValid(value))
-                        return 'Email nije u ispravnom formatu!';
-                      else
-                        return null;
-                    },
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    controller: phoneNumberController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        hintText: 'Broj telefona'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty)
-                        return 'Broj telefona je obavezan!';
-                      if (!isPhoneNumberValid(value))
-                        return 'Broj telefona nije u ispravnom formatu (060-000-000)!';
-                      else
-                        return null;
-                    },
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        hintText: 'Lozinka'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty)
-                        return 'Lozinka je obavezna!';
-                      if (!isPasswordValid(value))
-                        return 'Lozinka mora sadržavati minimalno 8 znakova, te velika, mala slova, brojeve i specijalne znakove';
-                      else
-                        return null;
-                    },
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    controller: confirmedPasswordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        hintText: 'Potvrda lozinke'),
-                    validator: (value) {
-                      if (value != passwordController.text)
-                        return 'Lozinke se ne poklapaju!';
-                      else
-                        return null;
-                    },
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                      height: 50,
-                      width: 150,
-                      decoration: BoxDecoration(
-                          color: Colors.blue[700],
-                          borderRadius: BorderRadius.circular(20)),
-                      child: TextButton(
-                          child: Text(
-                            'Spremi',
-                            style: TextStyle(color: Colors.white, fontSize: 20),
-                          ),
-                          onPressed: () async {
-                            if (!_formKey.currentState!.validate()) {
-                              return;
-                            }
-                            var result = await CreateUser();
-                            if (result == null) {
-                              showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) => AlertDialog(
-                                  content: const Text(
-                                      'Desila se greška prilikom registracije!'),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.pop(context, 'Ok'),
-                                      child: const Text('Ok'),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            } else {
-                              Navigator.of(context)
-                                  .pushReplacementNamed('/registrationLogin');
-                            }
-                          })),
-                ],
+                        child: TextButton(
+                            child: Text(
+                              'Spremi',
+                              style: TextStyle(color: Colors.white, fontSize: 20),
+                            ),
+                            onPressed: () async {
+                              if (!_formKey.currentState!.validate()) {
+                                return;
+                              }
+                              var result = await CreateUser();
+                              if (result == null) {
+                                showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) => AlertDialog(
+                                    content: const Text(
+                                        'Desila se greška prilikom registracije!'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.pop(context, 'Ok'),
+                                        child: const Text('Ok'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              } else {
+                                Navigator.of(context)
+                                    .pushReplacementNamed('/registrationLogin');
+                              }
+                            })),
+                  ],
+                ),
               ),
             )),
       ),
