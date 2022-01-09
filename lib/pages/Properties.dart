@@ -36,22 +36,56 @@ class _PropertiesState extends State<Properties> {
         appBar: AppBar(
           title: Text("Nekretnine"),
         ),
+        drawer: Drawer(
+          child: ListView(
+            children: [
+              ListTile(
+                title: Text('Nekretnine'),
+                onTap: () {
+                  Navigator.of(context).pushNamed('/properties');
+                },
+              ),
+              ListTile(
+                title: Text('Moje nekretnine'),
+                onTap: (){
+                  Navigator.of(context).pushNamed('/myProperties');
+                },
+              ),
+              ListTile(
+                title: Text('Moje posjete'),
+                onTap: (){
+                  Navigator.of(context).pushNamed('/myVisits');
+                },
+              ),
+              ListTile(
+                title: Text('Odjava'),
+                onTap: (){
+                  APIService.Logout();
+                  Navigator.of(context).pushNamed('/registrationLogin');
+                },
+              )
+            ],
+          ),
+        ),
         body: Column(
           children: [
             SingleChildScrollView(
               child: Column(
                 children: [
-                  TextField(
-                    controller: _searchTextController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        hintText: 'Naslov'),
-                    onChanged: (newVal) => {
-                      setState(() {
-                        GetProperties();
-                      })
-                    },
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
+                    child: TextField(
+                      controller: _searchTextController,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          hintText: 'Naslov'),
+                      onChanged: (newVal) => {
+                        setState(() {
+                          GetProperties();
+                        })
+                      },
+                    ),
                   ),
                   CountryDropDownWidget(),
                   CityDropDownWidget(),

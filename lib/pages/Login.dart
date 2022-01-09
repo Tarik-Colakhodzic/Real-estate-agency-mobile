@@ -78,7 +78,7 @@ class _LoginState extends State<Login> {
                       APIService.password = passwordController.text;
                       await GetData();
                       if (result != null) {
-                        Navigator.of(context).pushReplacementNamed('/home');
+                        Navigator.of(context).pushReplacementNamed('/properties');
                       } else {
                         print("Alert");
                         showDialog<String>(

@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class PropertyPhotos {
   final int id;
   final int propertyId;
