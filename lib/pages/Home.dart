@@ -31,6 +31,12 @@ class _HomeState extends State<Home> {
               },
             ),
             ListTile(
+              title: Text('Moje posjete'),
+              onTap: (){
+                Navigator.of(context).pushNamed('/myVisits');
+              },
+            ),
+            ListTile(
               title: Text('Odjava'),
               onTap: (){
                 APIService.Logout();

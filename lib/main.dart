@@ -7,6 +7,7 @@ import 'package:real_estate_mobile/pages/Home.dart';
 import 'package:real_estate_mobile/pages/MyProperties.dart';
 import 'package:real_estate_mobile/pages/Properties.dart';
 import 'package:real_estate_mobile/pages/Registration.dart';
+import 'package:real_estate_mobile/pages/MyVisits.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,7 +25,8 @@ class MyApp extends StatelessWidget {
       '/home': (context) => Home(),
       '/properties': (context) => Properties(),
       '/myProperties': (context) => MyProperties(),
-      '/registration': (context) =>  Registration()
+      '/registration': (context) =>  Registration(),
+      '/myVisits': (context) => MyVisits()
     });
   }
 }
