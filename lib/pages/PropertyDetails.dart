@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:real_estate_mobile/models/Property.dart';
 import 'package:real_estate_mobile/models/UserProperties.dart';
+import 'package:real_estate_mobile/models/Visit.dart';
 import 'package:real_estate_mobile/services/APIService.dart';
 import 'CarouselWithDots.dart';
 
@@ -16,11 +17,13 @@ class PropertyDetails extends StatefulWidget {
 
 class _PropertyDetailsState extends State<PropertyDetails> {
   int? _userPropertyId;
+  bool _isVisitRequestSent = false;
 
   @override
   void initState() {
     super.initState();
     GetMyProperties();
+    CheckVisitRequest();
   }
 
   @override
@@ -90,11 +93,15 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                         Row(
                           children: [
                             Expanded(
-                                child: CardInfoRowWidget("Broj soba",
-                                    widget.property.numberOfBedRooms.toString())),
+                                child: CardInfoRowWidget(
+                                    "Broj soba",
+                                    widget.property.numberOfBedRooms
+                                        .toString())),
                             Expanded(
-                                child: CardInfoRowWidget("Broj kupatila",
-                                    widget.property.numberOfBathRooms.toString()))
+                                child: CardInfoRowWidget(
+                                    "Broj kupatila",
+                                    widget.property.numberOfBathRooms
+                                        .toString()))
                           ],
                         ),
                         SizedBox(height: 10),
@@ -242,6 +249,20 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                         }),
                   )
                 : Text(""),
+            _isVisitRequestSent == false
+                ? Container(
+                    height: 50,
+                    width: 150,
+                    decoration: BoxDecoration(
+                        color: Colors.blue[700],
+                        borderRadius: BorderRadius.circular(20)),
+                    child: TextButton(
+                        child: Text(
+                          'Zakaži posjetu',
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
+                        onPressed: () => showVisitScheduler(context)))
+                : Text(""),
             SizedBox(height: 20)
           ],
         ),
@@ -264,6 +285,18 @@ class _PropertyDetailsState extends State<PropertyDetails> {
     });
   }
 
+  Future CheckVisitRequest() async {
+    Map<String, String?>? queryParams = {
+      'ClientId': APIService.loggedUserId.toString(),
+      'PropertyId': widget.property.id.toString()
+    };
+
+    var isSent = await APIService.Get('Visit', queryParams);
+    setState(() {
+      if (isSent!.length > 0) _isVisitRequestSent = true;
+    });
+  }
+
   Widget CardInfoRowWidget(title, value, {isBool = false}) {
     if (isBool == true) {
       value = value == 'true' ? "Da" : "Ne";
@@ -274,5 +307,97 @@ class _PropertyDetailsState extends State<PropertyDetails> {
         Text(value)
       ],
     );
+  }
+
+  Future<void> showVisitScheduler(BuildContext context) async {
+    return await showDialog(
+        context: context,
+        builder: (context) {
+          DateTime pickedDate = DateTime.now().add(Duration(days: 1));
+          DateTime? date = DateTime.now().add(Duration(days: 1));
+          TimeOfDay pickedTime = TimeOfDay(hour: 12, minute: 00);
+          TimeOfDay? time = TimeOfDay.now();
+
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return AlertDialog(
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ListTile(
+                      title: Text(
+                          "Date: ${pickedDate.year}, ${pickedDate.month}, ${pickedDate.day}"),
+                      trailing: Icon(Icons.keyboard_arrow_down),
+                      onTap: () async => {
+                        date = await showDatePicker(
+                            context: context,
+                            initialDate: pickedDate,
+                            firstDate: DateTime.now(),
+                            lastDate: DateTime.now().add(Duration(days: 365))),
+                        if (date != null)
+                          {
+                            setState(() {
+                              pickedDate = date!;
+                            })
+                          }
+                      },
+                    ),
+                    ListTile(
+                      title:
+                          Text("Time: ${pickedTime.hour}:${pickedTime.minute}"),
+                      trailing: Icon(Icons.keyboard_arrow_down),
+                      onTap: () async => {
+                        time = await showTimePicker(
+                            context: context, initialTime: pickedTime),
+                        if (time != null)
+                          {
+                            setState(() {
+                              pickedTime = time!;
+                            })
+                          }
+                      },
+                    )
+                  ],
+                ),
+                actions: <Widget>[
+                  TextButton(
+                      onPressed: () async {
+                        var visitDateTime = new DateTime(
+                            pickedDate.year,
+                            pickedDate.month,
+                            pickedDate.day,
+                            pickedTime.hour,
+                            pickedTime.minute);
+                        Visit visit = Visit(
+                            userId: APIService.loggedUserId,
+                            propertyId: widget.property.id,
+                            dateTime: visitDateTime.toIso8601String(),
+                            approved: false);
+                        var result = await APIService.Post(
+                            'Visit', jsonEncode(visit).toString());
+                        if (result != null) {
+                          Navigator.pop(context);
+                          CheckVisitRequest();
+                          showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              content: const Text(
+                                  'Zahtjev za posjetom uspješno poslan!'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, 'Ok'),
+                                  child: const Text('Ok'),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                      },
+                      child: Text("Spremi"))
+                ],
+              );
+            },
+          );
+        });
   }
 }
