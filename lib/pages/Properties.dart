@@ -47,19 +47,19 @@ class _PropertiesState extends State<Properties> {
               ),
               ListTile(
                 title: Text('Moje nekretnine'),
-                onTap: (){
+                onTap: () {
                   Navigator.of(context).pushNamed('/myProperties');
                 },
               ),
               ListTile(
                 title: Text('Moje posjete'),
-                onTap: (){
+                onTap: () {
                   Navigator.of(context).pushNamed('/myVisits');
                 },
               ),
               ListTile(
                 title: Text('Odjava'),
-                onTap: (){
+                onTap: () {
                   APIService.Logout();
                   Navigator.of(context).pushNamed('/registrationLogin');
                 },
@@ -74,12 +74,9 @@ class _PropertiesState extends State<Properties> {
                 children: [
                   Padding(
                     padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
-                    child: TextField(
+                    child: TextFormField(
                       controller: _searchTextController,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          hintText: 'Naslov'),
+                      decoration: InputDecoration(hintText: 'Naslov'),
                       onChanged: (newVal) => {
                         setState(() {
                           GetProperties();
@@ -110,9 +107,12 @@ class _PropertiesState extends State<Properties> {
       );
     }).toList();
 
-    if (selectedItem != null && selectedItem.id != 0)
+    if (selectedItem != null && selectedItem.id != 0) {
       _selectedCountry =
-          countryList.where((element) => element.id == selectedItem.id).first;
+          countryList
+              .where((element) => element.id == selectedItem.id)
+              .first;
+    }
     return countryList;
   }
 
@@ -145,7 +145,13 @@ class _PropertiesState extends State<Properties> {
   }
 
   Future<List<City>> GetCities(City? selectedItem) async {
-    var response = await APIService.Get('City', null);
+    Map<String, String?> queryParams = {"CountryId": _selectedCountry?.id.toString()};
+    List? response = null;
+    if(_selectedCountry == null)
+       response = await APIService.Get('City', null);
+    else
+      response = await APIService.Get('City', queryParams);
+
     var cityList = response!.map((i) => City.fromJson(i)).toList();
 
     cities = cityList.map((item) {
@@ -155,9 +161,12 @@ class _PropertiesState extends State<Properties> {
       );
     }).toList();
 
-    if (selectedItem != null && selectedItem.id != 0)
+    var cityListContainsSelectedItem = cityList.where((element) => element.id == _selectedCity?.id).length > 0;
+    if (selectedItem != null && selectedItem.id != 0 && cityListContainsSelectedItem)
       _selectedCity =
           cityList.where((element) => element.id == selectedItem.id).first;
+    else
+      _selectedCity = null;
     return cityList;
   }
 
@@ -316,7 +325,7 @@ class _PropertiesState extends State<Properties> {
     if (_selectedOfferType != null && _selectedOfferType?.id != 0)
       queryParams.addAll({'OfferTypeId': _selectedOfferType?.id.toString()});
 
-    if(_selectedCity != null && _selectedCity?.id != 0)
+    if (_selectedCity != null && _selectedCity?.id != 0)
       queryParams.addAll({'CityId': _selectedCity?.id.toString()});
 
     if (_searchTextController.text.isNotEmpty)
