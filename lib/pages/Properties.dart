@@ -58,6 +58,12 @@ class _PropertiesState extends State<Properties> {
                 },
               ),
               ListTile(
+                title: Text('Knjiga žalbi'),
+                onTap: () {
+                  Navigator.of(context).pushNamed('/complaints');
+                },
+              ),
+              ListTile(
                 title: Text('Odjava'),
                 onTap: () {
                   APIService.Logout();

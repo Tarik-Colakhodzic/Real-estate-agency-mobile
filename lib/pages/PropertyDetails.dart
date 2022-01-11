@@ -119,7 +119,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                                     isBool: true))
                           ],
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: 15),
                         CardInfoRowWidget(
                             "Datum objave",
                             widget.property.publishDate.day.toString() +
@@ -231,7 +231,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                       },
                     ),
             ),
-            SizedBox(height: 10),
+            widget.property.offerTypeName == 'Prodaja' ? SizedBox(height: 10) : Text(""),
             widget.property.offerTypeName == 'Prodaja'
                 ? Container(
                     height: 50,
@@ -249,6 +249,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                         }),
                   )
                 : Text(""),
+            _isVisitRequestSent ? SizedBox(height: 10) : Text(""),
             _isVisitRequestSent == false
                 ? Container(
                     height: 50,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:real_estate_mobile/pages/Complaints.dart';
 import 'package:real_estate_mobile/pages/Login.dart';
 import 'package:real_estate_mobile/pages/Loading.dart';
 import 'package:real_estate_mobile/pages/MyProperties.dart';
@@ -22,7 +23,8 @@ class MyApp extends StatelessWidget {
       '/properties': (context) => Properties(),
       '/myProperties': (context) => MyProperties(),
       '/registration': (context) =>  Registration(),
-      '/myVisits': (context) => MyVisits()
+      '/myVisits': (context) => MyVisits(),
+      '/complaints': (context) => Complaints()
     });
   }
 }
