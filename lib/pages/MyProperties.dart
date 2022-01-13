@@ -56,7 +56,8 @@ class _MyPropertiesState extends State<MyProperties> {
 
   Future<List<UserProperties>> GetMyProperties() async {
     Map<String, String?>? queryParams = {
-      'UserId': APIService.loggedUserId.toString()
+      'UserId': APIService.loggedUserId.toString(),
+      'Finished': "false"
     };
     List<String> includeList = ["Property", "Property.City", "Property.Category", "Property.OfferType"];
 

@@ -18,11 +18,14 @@ class _LoginState extends State<Login> {
     result = await APIService.Get('User', null);
     if (result == null) return;
     var users = result.map((e) => User.fromJson((e))).toList();
-    if (users.length > 0)
-      APIService.loggedUserId = users
+    if (users.length > 0){
+      var user = users
           .where((element) => element.username == usernameController.text)
-          .first
-          .id;
+          .first;
+      APIService.loggedUserId = user.id;
+      APIService.loggedUserFullName = user.fullName;
+    }
+
   }
 
   @override
@@ -70,7 +73,7 @@ class _LoginState extends State<Login> {
                       borderRadius: BorderRadius.circular(20)),
                   child: TextButton(
                     child: Text(
-                      'Login',
+                      'Prijava',
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                     onPressed: () async {
@@ -80,7 +83,6 @@ class _LoginState extends State<Login> {
                       if (result != null) {
                         Navigator.of(context).pushReplacementNamed('/properties');
                       } else {
-                        print("Alert");
                         showDialog<String>(
                           context: context,
                           builder: (BuildContext context) => AlertDialog(
@@ -103,7 +105,7 @@ class _LoginState extends State<Login> {
                   height: 20,
                 ),
                 InkWell(
-                  child: Text('Registracija!', style: TextStyle(color: Colors.blue)),
+                  child: Text('Registracija', style: TextStyle(color: Colors.blue)),
                   onTap: () =>
                       Navigator.of(context).pushReplacementNamed('/registration'),
                 )

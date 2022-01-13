@@ -5,6 +5,7 @@ import 'dart:io';
 class APIService {
   static String username = "";
   static String password = "";
+  static String loggedUserFullName = "";
   static int loggedUserId = 0;
   String route = "";
 
@@ -62,6 +63,28 @@ class APIService {
    return null;
  }
 
+  static Future<dynamic> Patch(String route, String id, String value) async {
+    String baseUrl="http://127.0.0.1:5010/api/" + route + '/' + id + '/' + value;
+    final String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    var response = null;
+    if(username.isNotEmpty && password.isNotEmpty) {
+      response = await http.patch(
+        Uri.parse(baseUrl),
+        headers: <String, String>{
+          'Authorization': basicAuth
+        },
+      );
+    }
+    if(response.statusCode == 200){
+      return "200";
+    }
+    if(response.statusCode != 200){
+      return "500";
+    }
+    return null;
+  }
+
  static Future<dynamic> Post(String route, String body) async {
    String baseUrl="http://127.0.0.1:5010/api/"+route;
    final String basicAuth =
@@ -87,6 +110,12 @@ class APIService {
      );
    }
 
+   if(response.statusCode == 200 && response.body.isEmpty){
+     return "200";
+   }
+   if(response.statusCode != 200 && response.body.isEmpty){
+     return "500";
+   }
    if (response.statusCode == 200) {
      return json.decode(response.body);
    }
@@ -97,5 +126,6 @@ class APIService {
     APIService.username = "";
     APIService.password = "";
     APIService.loggedUserId = 0;
+    APIService.loggedUserFullName = "";
  }
 }

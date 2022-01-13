@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:real_estate_mobile/models/CreditCard.dart';
 import 'package:real_estate_mobile/models/Property.dart';
 import 'package:real_estate_mobile/models/UserProperties.dart';
 import 'package:real_estate_mobile/models/Visit.dart';
@@ -231,7 +232,9 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                       },
                     ),
             ),
-            widget.property.offerTypeName == 'Prodaja' ? SizedBox(height: 10) : Text(""),
+            widget.property.offerTypeName == 'Prodaja'
+                ? SizedBox(height: 10)
+                : Text(""),
             widget.property.offerTypeName == 'Prodaja'
                 ? Container(
                     height: 50,
@@ -244,9 +247,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                           'Kupi',
                           style: TextStyle(color: Colors.white, fontSize: 16),
                         ),
-                        onPressed: () async {
-                          print("Kupljeno");
-                        }),
+                        onPressed: () => showCardPayment(context)),
                   )
                 : Text(""),
             _isVisitRequestSent ? SizedBox(height: 10) : Text(""),
@@ -384,6 +385,148 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                             builder: (BuildContext context) => AlertDialog(
                               content: const Text(
                                   'Zahtjev za posjetom uspješno poslan!'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, 'Ok'),
+                                  child: const Text('Ok'),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                      },
+                      child: Text("Spremi"))
+                ],
+              );
+            },
+          );
+        });
+  }
+
+  Future<void> showCardPayment(BuildContext context) async {
+    return await showDialog(
+        context: context,
+        builder: (context) {
+          TextEditingController numberController = new TextEditingController();
+          TextEditingController cvcController = new TextEditingController();
+          TextEditingController addressCityController =
+              new TextEditingController();
+          TextEditingController addressCountryController =
+              new TextEditingController();
+
+          final _formKey = GlobalKey<FormState>();
+
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return AlertDialog(
+                content: Form(
+                  key: _formKey,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextFormField(
+                          controller: numberController,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              hintText: 'Broj kartice'),
+                          validator: (value) {
+                            if (value == null || value.isEmpty)
+                              return 'Broj kartice je obavezan!';
+                            else
+                              return null;
+                          },
+                        ),
+                        SizedBox(height: 15),
+                        TextFormField(
+                          controller: cvcController,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              hintText: 'CVC'),
+                          validator: (value) {
+                            if (value == null || value.isEmpty)
+                              return 'CVC je obavezan!';
+                            else
+                              return null;
+                          },
+                        ),
+                        SizedBox(height: 15),
+                        TextFormField(
+                          controller: addressCityController,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              hintText: 'Grad'),
+                          validator: (value) {
+                            if (value == null || value.isEmpty)
+                              return 'Grad je obavezan!';
+                            else
+                              return null;
+                          },
+                        ),
+                        SizedBox(height: 15),
+                        TextFormField(
+                          controller: addressCountryController,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              hintText: 'Država'),
+                          validator: (value) {
+                            if (value == null || value.isEmpty)
+                              return 'Država je obavezna!';
+                            else
+                              return null;
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                      onPressed: () async {
+                        if (!_formKey.currentState!.validate()) {
+                          return;
+                        }
+                        CreditCard creditCard = CreditCard(
+                            expYear:
+                                DateTime.now().add(Duration(days: 365)).year,
+                            expMonth: 12,
+                            name: APIService.loggedUserFullName,
+                            currency: 'bam',
+                            number: numberController.text,
+                            cvc: cvcController.text,
+                            addressCity: addressCityController.text,
+                            addressCountry: addressCountryController.text);
+
+                        var result = await APIService.Post(
+                            'Payment/ProccessPayment',
+                            jsonEncode(creditCard).toString());
+                        if (result == "200") {
+                          await APIService.Patch('Property',
+                              widget.property.id.toString(), 'true');
+                          Navigator.pop(context);
+                          showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              content: const Text(
+                                  'Transakcija uspješno prošla. Čestitamo, upravo ste postali vlasnik ove nekretnine!'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () => Navigator.of(context).pushNamed('/properties'),
+                                  child: const Text('Ok'),
+                                ),
+                              ],
+                            ),
+                          );
+                        } else {
+                          showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              content: const Text(
+                                  'Desila se greška prilikom izvršenja transakcija!'),
                               actions: <Widget>[
                                 TextButton(
                                   onPressed: () => Navigator.pop(context, 'Ok'),

@@ -7,6 +7,7 @@ class User {
   String? phoneNumber;
   String? password;
   String? confirmedPassword;
+  String? fullName;
   List<int>? roles;
 
   User(
@@ -18,11 +19,12 @@ class User {
       this.phoneNumber,
       this.password,
       this.confirmedPassword,
-      this.roles});
+      this.roles,
+      this.fullName});
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-        id: int.parse(json["id"].toString()), username: json["username"]);
+        id: int.parse(json["id"].toString()), username: json["username"], fullName: json["fullName"]);
   }
 
   Map<String, dynamic> toJson() => {
