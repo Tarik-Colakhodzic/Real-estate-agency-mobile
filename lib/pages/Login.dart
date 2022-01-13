@@ -107,7 +107,7 @@ class _LoginState extends State<Login> {
                 InkWell(
                   child: Text('Registracija', style: TextStyle(color: Colors.blue)),
                   onTap: () =>
-                      Navigator.of(context).pushReplacementNamed('/registration'),
+                      Navigator.of(context).pushNamed('/registration'),
                 )
               ],
             ),

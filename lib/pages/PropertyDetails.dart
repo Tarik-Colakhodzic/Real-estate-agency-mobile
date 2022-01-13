@@ -450,7 +450,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                           validator: (value) {
                             if (value == null || value.isEmpty)
                               return 'CVC je obavezan!';
-                            if(!isCVCValid(value))
+                            if (!isCVCValid(value))
                               return 'CVC nije u ispravnom formatu!';
                             else
                               return null;
@@ -499,6 +499,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                                 DateTime.now().add(Duration(days: 365)).year,
                             expMonth: 12,
                             name: APIService.loggedUserFullName,
+                            amount: double.parse(widget.property.price) * 100,
                             currency: 'bam',
                             number: numberController.text,
                             cvc: cvcController.text,

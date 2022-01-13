@@ -2,6 +2,7 @@ class CreditCard {
   final int expMonth;
   final int expYear;
   final String number;
+  final double amount;
   final String addressCity;
   final String addressCountry;
   final String currency;
@@ -12,6 +13,7 @@ class CreditCard {
       {required this.expMonth,
       required this.expYear,
       required this.number,
+      required this.amount,
       required this.addressCity,
       required this.addressCountry,
       required this.currency,
@@ -23,6 +25,7 @@ class CreditCard {
         expMonth: int.parse(json["expMonth"].toString()),
         expYear: int.parse(json["expYear"].toString()),
         number: json["number"],
+        amount: json["amount"],
         addressCity: json["addressCity"],
         addressCountry: json["addressCountry"],
         currency: json["currency"],
@@ -34,6 +37,7 @@ class CreditCard {
         "expMonth": expMonth,
         "expYear": expYear,
         "number": number,
+        "amount": amount,
         "addressCity": addressCity,
         "addressCountry": addressCountry,
         "currency": currency,
