@@ -23,7 +23,7 @@ class APIService {
         queryString += "&IncludeList=${element}";
       });
     }
-    String baseUrl = "http://127.0.0.1:5010/api/" + route;
+    String baseUrl = "http://localhost:5010/api/" + route;
     if (object != null) {
       baseUrl = baseUrl + '?' + queryString;
     }
@@ -39,20 +39,8 @@ class APIService {
     return null;
   }
 
-// static Future<dynamic> GetById(String route, dynamic id) async{
-//   String baseUrl="http://127.0.0.1:5010/api/"+ route + "/" + id;
-//   final String basicAuth='Basic '+base64Encode(utf8.encode('$username:$password'));
-//   final response= await http.get(
-//     Uri.parse(baseUrl),
-//     headers: {HttpHeaders.authorizationHeader:basicAuth},
-//   );
-//   if(response.statusCode==200)
-//     return json.decode(response.body);
-//   return null;
-// }
-
  static Future<dynamic> Delete(String route, dynamic id) async {
-   String baseUrl="http://127.0.0.1:5010/api/"+ route + "/" + id;
+   String baseUrl="http://localhost:5010/api/"+ route + "/" + id;
    final String basicAuth='Basic '+base64Encode(utf8.encode('$username:$password'));
    final response = await http.delete(
      Uri.parse(baseUrl),
@@ -64,7 +52,7 @@ class APIService {
  }
 
   static Future<dynamic> Patch(String route, String id, String value) async {
-    String baseUrl="http://127.0.0.1:5010/api/" + route + '/' + id + '/' + value;
+    String baseUrl="http://localhost:5010/api/" + route + '/' + id + '/' + value;
     final String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     var response = null;
@@ -86,7 +74,7 @@ class APIService {
   }
 
  static Future<dynamic> Post(String route, String body) async {
-   String baseUrl="http://127.0.0.1:5010/api/"+route;
+   String baseUrl="http://localhost:5010/api/"+route;
    final String basicAuth =
        'Basic ' + base64Encode(utf8.encode('$username:$password'));
    var response = null;
