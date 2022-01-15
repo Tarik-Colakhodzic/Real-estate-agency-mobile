@@ -320,7 +320,7 @@ class _PropertiesState extends State<Properties> {
   }
 
   Future<List<Property>> GetProperties() async {
-    Map<String, String?>? queryParams = {'Finished': 'false'};
+    Map<String, String?>? queryParams = {'Finished': 'false', 'Unfinished': 'true'};
 
     if (_selectedCountry != null && _selectedCountry?.id != 0)
       queryParams.addAll({'CountryId': _selectedCountry?.id.toString()});
