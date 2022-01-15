@@ -356,7 +356,7 @@ class _PropertiesState extends State<Properties> {
             },
             child: Padding(
               padding: EdgeInsets.all(20),
-              child: Text(property.title + " " + property.price),
+              child: Text(property.title + " (" + property.price + "KM)"),
             )));
   }
 }
