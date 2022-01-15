@@ -413,6 +413,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
               new TextEditingController();
           TextEditingController addressCountryController =
               new TextEditingController();
+          bool firstPress = true;
 
           final _formKey = GlobalKey<FormState>();
 
@@ -494,6 +495,10 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                         if (!_formKey.currentState!.validate()) {
                           return;
                         }
+                        if(!firstPress){
+                          return;
+                        }
+                        firstPress = false;
                         CreditCard creditCard = CreditCard(
                             expYear:
                                 DateTime.now().add(Duration(days: 365)).year,
@@ -505,7 +510,6 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                             cvc: cvcController.text,
                             addressCity: addressCityController.text,
                             addressCountry: addressCountryController.text);
-
                         var result = await APIService.Post(
                             'Payment/ProccessPayment',
                             jsonEncode(creditCard).toString());
@@ -543,7 +547,8 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                           );
                         }
                       },
-                      child: Text("Spremi"))
+                      child: Text("Spremi"),
+                  )
                 ],
               );
             },
