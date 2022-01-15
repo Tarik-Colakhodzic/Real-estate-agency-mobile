@@ -23,7 +23,7 @@ class APIService {
         queryString += "&IncludeList=${element}";
       });
     }
-    String baseUrl = "http://localhost:5010/api/" + route;
+    String baseUrl = "http://10.0.2.2:5010/api/" + route;
     if (object != null) {
       baseUrl = baseUrl + '?' + queryString;
     }
@@ -40,7 +40,7 @@ class APIService {
   }
 
  static Future<dynamic> Delete(String route, dynamic id) async {
-   String baseUrl="http://localhost:5010/api/"+ route + "/" + id;
+   String baseUrl="http://10.0.2.2:5010/api/"+ route + "/" + id;
    final String basicAuth='Basic '+base64Encode(utf8.encode('$username:$password'));
    final response = await http.delete(
      Uri.parse(baseUrl),
@@ -52,7 +52,7 @@ class APIService {
  }
 
   static Future<dynamic> Patch(String route, String id, String value) async {
-    String baseUrl="http://localhost:5010/api/" + route + '/' + id + '/' + value;
+    String baseUrl="http://10.0.2.2:5010/api/" + route + '/' + id + '/' + value;
     final String basicAuth =
         'Basic ' + base64Encode(utf8.encode('$username:$password'));
     var response = null;
@@ -74,7 +74,7 @@ class APIService {
   }
 
  static Future<dynamic> Post(String route, String body) async {
-   String baseUrl="http://localhost:5010/api/"+route;
+   String baseUrl="http://10.0.2.2:5010/api/"+route;
    final String basicAuth =
        'Basic ' + base64Encode(utf8.encode('$username:$password'));
    var response = null;
