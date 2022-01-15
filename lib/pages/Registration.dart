@@ -168,19 +168,21 @@ class _RegistrationState extends State<Registration> {
                         child: TextButton(
                             child: Text(
                               'Spremi',
-                              style: TextStyle(color: Colors.white, fontSize: 20),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 20),
                             ),
                             onPressed: () async {
                               if (!_formKey.currentState!.validate()) {
                                 return;
                               }
                               var result = await CreateUser();
-                              if (result == null) {
+                              if (result == "500") {
                                 showDialog<String>(
                                   context: context,
-                                  builder: (BuildContext context) => AlertDialog(
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
                                     content: const Text(
-                                        'Desila se greška prilikom registracije!'),
+                                        'Korisnik sa istim korisničkim imenom već postoji, molimo da ga promijenite!'),
                                     actions: <Widget>[
                                       TextButton(
                                         onPressed: () =>
@@ -206,7 +208,8 @@ class _RegistrationState extends State<Registration> {
   Future<dynamic> CreateUser() async {
     var rolesResponse = await APIService.Get('Role', null);
     var roles = rolesResponse!.map((e) => Role.fromJson(e)).toList();
-    var clientRoleId  = roles.where((element) => element.name == 'Client').first.id;
+    var clientRoleId =
+        roles.where((element) => element.name == 'Client').first.id;
 
     var user = User(
         id: 0,
