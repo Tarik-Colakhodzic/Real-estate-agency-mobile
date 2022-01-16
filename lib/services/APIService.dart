@@ -19,12 +19,17 @@ class APIService {
   static Future<List<dynamic>?> Get(String route, dynamic object, {List<String>? includeList = null}) async {
     String queryString = Uri(queryParameters: object).query;
     if(includeList != null && includeList.length > 0){
-      includeList.forEach((element) {
-        queryString += "&IncludeList=${element}";
+      includeList.asMap().forEach((index, element) {
+        if(index == 0 && object == null){
+          queryString = "IncludeList=${element}";
+        }
+        else {
+          queryString += "&IncludeList=${element}";
+        }
       });
     }
     String baseUrl = "http://10.0.2.2:5010/api/" + route;
-    if (object != null) {
+    if (object != null || includeList != null) {
       baseUrl = baseUrl + '?' + queryString;
     }
     final String basicAuth =

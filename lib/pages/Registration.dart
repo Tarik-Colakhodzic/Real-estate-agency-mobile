@@ -115,7 +115,7 @@ class _RegistrationState extends State<Registration> {
                         if (value == null || value.isEmpty)
                           return 'Broj telefona je obavezan!';
                         if (!isPhoneNumberValid(value))
-                          return 'Broj telefona nije u ispravnom formatu (060-000-000)!';
+                          return 'Broj telefona nije u ispravnom formatu (061-123-456)!';
                         else
                           return null;
                       },

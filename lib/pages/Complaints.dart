@@ -116,9 +116,9 @@ class _ComplaintsState extends State<Complaints> {
   Future<List<Agent>> GetAgents(Agent? selectedItem) async {
     List<String> includeList = ["User"];
     var response = await APIService.Get('Agent', null, includeList: includeList);
-    var countryList = response!.map((i) => Agent.fromJson(i)).toList();
+    var agentList = response!.map((i) => Agent.fromJson(i)).toList();
 
-    agents = countryList.map((item) {
+    agents = agentList.map((item) {
       return DropdownMenuItem<Agent>(
         child: Text(item.fullName),
         value: item,
@@ -127,11 +127,11 @@ class _ComplaintsState extends State<Complaints> {
 
     if (selectedItem != null && selectedItem.id != 0) {
       _selectedAgent =
-          countryList
+          agentList
               .where((element) => element.id == selectedItem.id)
               .first;
     }
-    return countryList;
+    return agentList;
   }
 
   Widget AgentDropDownWidget() {
