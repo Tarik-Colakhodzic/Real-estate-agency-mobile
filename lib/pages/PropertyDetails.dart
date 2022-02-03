@@ -491,63 +491,67 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                 ),
                 actions: <Widget>[
                   TextButton(
-                      onPressed: () async {
-                        if (!_formKey.currentState!.validate()) {
-                          return;
-                        }
-                        if(!firstPress){
-                          return;
-                        }
-                        firstPress = false;
-                        CreditCard creditCard = CreditCard(
-                            expYear:
-                                DateTime.now().add(Duration(days: 365)).year,
-                            expMonth: 12,
-                            name: APIService.loggedUserFullName,
-                            amount: double.parse(widget.property.price) * 100,
-                            currency: 'bam',
-                            number: numberController.text,
-                            cvc: cvcController.text,
-                            addressCity: addressCityController.text,
-                            addressCountry: addressCountryController.text);
-                        var result = await APIService.Post(
-                            'Payment/ProccessPayment',
-                            jsonEncode(creditCard).toString());
-                        if (result == "200") {
-                          await APIService.Patch('Property',
-                              widget.property.id.toString(), 'true');
-                          Navigator.pop(context);
-                          showDialog<String>(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              content: const Text(
-                                  'Transakcija uspješno prošla. Čestitamo, upravo ste postali vlasnik ove nekretnine!'),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () => Navigator.of(context)
-                                      .pushNamed('/properties'),
-                                  child: const Text('Ok'),
-                                ),
-                              ],
-                            ),
-                          );
-                        } else {
-                          showDialog<String>(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              content: const Text(
-                                  'Desila se greška prilikom izvršenja transakcija!'),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context, 'Ok'),
-                                  child: const Text('Ok'),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                      },
-                      child: Text("Spremi"),
+                    onPressed: () async {
+                      if (!_formKey.currentState!.validate()) {
+                        return;
+                      }
+                      if (!firstPress) {
+                        return;
+                      }
+                      firstPress = false;
+                      CreditCard creditCard = CreditCard(
+                          expYear: DateTime.now().add(Duration(days: 365)).year,
+                          expMonth: 12,
+                          name: APIService.loggedUserFullName,
+                          amount: double.parse(widget.property.price) * 100,
+                          currency: 'bam',
+                          number: numberController.text,
+                          cvc: cvcController.text,
+                          addressCity: addressCityController.text,
+                          addressCountry: addressCountryController.text,
+                          propertyId: widget.property.id,
+                          description: "Uplata korisnika " +
+                              APIService.loggedUserFullName +
+                              " za nekretninu " +
+                              widget.property.title);
+                      var result = await APIService.Post(
+                          'Payment/ProccessPayment',
+                          jsonEncode(creditCard).toString());
+                      if (result == "200") {
+                        await APIService.Patch(
+                            'Property', widget.property.id.toString(), 'true');
+                        Navigator.pop(context);
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            content: const Text(
+                                'Transakcija uspješno prošla. Čestitamo, upravo ste postali vlasnik ove nekretnine!'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () => Navigator.of(context)
+                                    .pushNamed('/properties'),
+                                child: const Text('Ok'),
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            content: const Text(
+                                'Desila se greška prilikom izvršenja transakcije!'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, 'Ok'),
+                                child: const Text('Ok'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    },
+                    child: Text("Spremi"),
                   )
                 ],
               );

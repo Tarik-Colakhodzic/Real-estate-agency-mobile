@@ -8,6 +8,8 @@ class CreditCard {
   final String currency;
   final String cvc;
   final String name;
+  final int propertyId;
+  final String description;
 
   CreditCard(
       {required this.expMonth,
@@ -18,7 +20,9 @@ class CreditCard {
       required this.addressCountry,
       required this.currency,
       required this.cvc,
-      required this.name});
+      required this.name,
+      required this.propertyId,
+      required this.description});
 
   factory CreditCard.fromJson(Map<String, dynamic> json) {
     return CreditCard(
@@ -30,7 +34,9 @@ class CreditCard {
         addressCountry: json["addressCountry"],
         currency: json["currency"],
         cvc: json["cvc"],
-        name: json["name"]);
+        name: json["name"],
+        propertyId: json["propertyId"],
+        description: json["description"]);
   }
 
   Map<String, dynamic> toJson() => {
@@ -42,6 +48,8 @@ class CreditCard {
         "addressCountry": addressCountry,
         "currency": currency,
         "cvc": cvc,
-        "name": name
+        "name": name,
+        "propertyId": propertyId,
+        "description": description
       };
 }
